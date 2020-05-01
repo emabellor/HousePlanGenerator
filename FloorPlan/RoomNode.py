@@ -9,6 +9,7 @@ import random
 class RoomNode:
     def __init__(self, room_type: RoomType):
         self.room_type = room_type
+        self.extra_rooms: List['RoomNode'] = []
         self.children: List['RoomNode'] = []
         self.area = 0
 
@@ -30,7 +31,7 @@ class RoomNode:
         slice_item = SquarifiedTreeMap.get_slice(nodes, 1, min_slice_ratio)
         rectangles = SquarifiedTreeMap.get_rectangles_slice_item(slice_item, width, height)
 
-        fp = FloorPlan()
+        fp = FloorPlan(width, height)
 
         # Build our floorplan off our our tree map
         for r in rectangles:
@@ -38,8 +39,11 @@ class RoomNode:
 
             # Build our rooms internal tree map
             for child in r.slice_item.elements:
-                # We ignore ourself and nodes without children
-                if child.obj != self and len(child.obj.children) > 0:
+                # We ignore nodes without extra_rooms
+                if len(child.obj.extra_rooms) > 0:
+                    # Set children and blank the extra_rooms variable
+                    child.obj.children = child.obj.extra_rooms
+                    child.obj.extra_rooms = []
                     # Child tree ma uses local coordinates of parent room
                     # We must offset these and then merge our floorplans
                     internal_fp = child.obj.to_floor_plan_width_height(r.width, r.height)

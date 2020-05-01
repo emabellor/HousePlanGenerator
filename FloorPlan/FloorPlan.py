@@ -2,8 +2,10 @@ from FloorPlan.Room import RoomType, Room
 
 
 class FloorPlan:
-    def __init__(self):
+    def __init__(self, width, height):
         self.rooms = []
+        self.width = width
+        self.height = height
 
     def add_room(self, x, y, width, height, room_type: RoomType):
         self.rooms.append(Room(x, y, width, height, room_type))

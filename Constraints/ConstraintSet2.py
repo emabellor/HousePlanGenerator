@@ -5,7 +5,7 @@ from typing import Dict
 class ConstraintSet:
     constraints: Dict[str, Constraint] = {}
 
-    def add(self, name, constraint: Constraint):
+    def add_or_update(self, name, constraint: Constraint):
         self.constraints[name] = constraint
 
     def remove(self, name):

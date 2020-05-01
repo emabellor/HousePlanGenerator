@@ -6,7 +6,14 @@ import numpy as np
 
 
 def main():
-    generator = SuburbanGenerator()
+    generator = SuburbanGenerator(250, 250)
+
+    generator.set_static_room_number(RoomType.LIVING_ROOM, 0)
+    generator.set_static_room_number(RoomType.KITCHEN, 0)
+    generator.set_static_room_number(RoomType.BEDROOM, 2)
+    generator.set_static_room_number(RoomType.BATHROOM, 1)
+    generator.set_static_room_number(RoomType.EXTRA_ROOM, 1)
+
     fp = generator.generate_floor_plan()
 
     show_floor_plan(fp)
@@ -14,8 +21,8 @@ def main():
 
 
 def show_floor_plan(fp: FloorPlan):
-    width = 252
-    height = 252
+    width = fp.width
+    height = fp.height
 
     image = np.zeros((height, width, 3), np.uint8)
     image[:] = 255
