@@ -3,7 +3,9 @@ from typing import Dict
 
 
 class ConstraintSet:
-    constraints: Dict[str, Constraint] = {}
+
+    def __init__(self):
+        self.constraints: Dict[str, Constraint] = {}
 
     def add_or_update(self, name, constraint: Constraint):
         self.constraints[name] = constraint

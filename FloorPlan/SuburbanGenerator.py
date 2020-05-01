@@ -34,7 +34,8 @@ class SuburbanGenerator:
             raise Exception('Rooms cant be greater than 1 for EXTRA_ROOM type')
 
         room_name_constraint = self.get_room_name_constraint(room_type)
-        self.constraints.add_or_update(room_name_constraint, MinMax(rooms, rooms))
+        constraint =  MinMax(rooms, rooms)
+        self.constraints.add_or_update(room_name_constraint, constraint)
 
     @staticmethod
     def get_room_name_constraint(room_type: RoomType):
