@@ -9,7 +9,7 @@ import numpy as np
 def main():
     floor_generator_list: List[SuburbanGenerator] = []
 
-    first_floor = SuburbanGenerator(250, 250)
+    first_floor = SuburbanGenerator(300, 300)
     first_floor.set_static_room_number(RoomType.LIVING_ROOM, 1)
     first_floor.set_static_room_number(RoomType.KITCHEN, 1)
     first_floor.set_static_room_number(RoomType.BEDROOM, 1)
@@ -17,13 +17,21 @@ def main():
     first_floor.set_static_room_number(RoomType.EXTRA_ROOM, 1)
     floor_generator_list.append(first_floor)
 
-    second_floor = SuburbanGenerator(230, 230)
+    second_floor = SuburbanGenerator(250, 250)
     second_floor.set_static_room_number(RoomType.LIVING_ROOM, 0)
     second_floor.set_static_room_number(RoomType.KITCHEN, 0)
     second_floor.set_static_room_number(RoomType.BEDROOM, 2)
     second_floor.set_static_room_number(RoomType.BATHROOM, 1)
     second_floor.set_static_room_number(RoomType.EXTRA_ROOM, 1)
     floor_generator_list.append(second_floor)
+
+    third_floor = SuburbanGenerator(250, 200)
+    third_floor.set_static_room_number(RoomType.LIVING_ROOM, 0)
+    third_floor.set_static_room_number(RoomType.KITCHEN, 0)
+    third_floor.set_static_room_number(RoomType.BEDROOM, 1)
+    third_floor.set_static_room_number(RoomType.BATHROOM, 0)
+    third_floor.set_static_room_number(RoomType.EXTRA_ROOM, 0)
+    floor_generator_list.append(third_floor)
 
     fp_list = generate_house_plan(floor_generator_list)
     show_house_plan(fp_list)
@@ -57,8 +65,8 @@ def generate_house_plan(floor_generator_list: List[SuburbanGenerator]):
 
 def show_house_plan(fp_list: List[FloorPlan]):
     for count, fp in enumerate(fp_list):
-        width = fp.width
-        height = fp.height
+        width = fp.width + 1
+        height = fp.height + 1
 
         image = np.zeros((height, width, 3), np.uint8)
         image[:] = 255

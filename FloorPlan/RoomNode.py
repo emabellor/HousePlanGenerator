@@ -1,6 +1,6 @@
 from FloorPlan.Room import RoomType
 from Constraints.Constraint import Constraint
-from DataStructures.SquarifiedTeeMap import SquarifiedTreeMap, Element
+from DataStructures.SquarifiedTeeMap import SquarifiedTreeMap, Element, Slice
 from typing import List
 from FloorPlan.FloorPlan import FloorPlan
 import random
@@ -19,7 +19,7 @@ class RoomNode:
 
     def to_floor_plan_width_height(self, width, height):
         # min_slice_ratio = Constraint.get_random_number(25, 45) / 100
-        # TODO revert this
+        # line to avoid stack overflow exception. Set based on the c# code
         min_slice_ratio = 0
 
         # Generate our squarified tree map
@@ -28,12 +28,18 @@ class RoomNode:
         # We want to include our own area inside our tree map
         nodes.insert(0, Element(self, self.area))
 
-        slice_item = SquarifiedTreeMap.get_slice(nodes, 1, min_slice_ratio)
+        # The get_rectangles_slice_item does not work if there is one item into list
+        # We need to check that condition and generate the slice_item as shown below
+        if len(nodes) == 1:
+            slice_item = Slice(nodes, 1, [Slice(nodes, 1, [])])
+        else:
+            slice_item = SquarifiedTreeMap.get_slice(nodes, 1, min_slice_ratio)
+
         rectangles = SquarifiedTreeMap.get_rectangles_slice_item(slice_item, width, height)
 
         fp = FloorPlan(width, height)
 
-        # Build our floorplan off our our tree map
+        # Build our floor plan off our our tree map
         for r in rectangles:
             fp.add_room(r.x, r.y, r.width, r.height, r.slice_item.elements[0].obj.room_type)
 

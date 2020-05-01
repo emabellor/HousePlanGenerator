@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="badb0268-5362-49d9-8141-acdae13639db" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/Constraints/ConstraintSet2.py" beforeDir="false" afterPath="$PROJECT_DIR$/Constraints/ConstraintSet2.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FloorPlan/SuburbanGenerator.py" beforeDir="false" afterPath="$PROJECT_DIR$/FloorPlan/SuburbanGenerator.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FloorPlan/RoomNode.py" beforeDir="false" afterPath="$PROJECT_DIR$/FloorPlan/RoomNode.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -18,8 +18,8 @@
       <file leaf-file-name="main.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="19" column="39" lean-forward="true" selection-start-line="19" selection-start-column="39" selection-end-line="19" selection-end-column="39" />
+            <state relative-caret-position="306">
+              <caret line="24" column="62" selection-start-line="24" selection-start-column="62" selection-end-line="24" selection-end-column="62" />
               <folding>
                 <element signature="e#0#57#0" expanded="true" />
               </folding>
@@ -48,8 +48,8 @@
       <file leaf-file-name="SuburbanGenerator.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/FloorPlan/SuburbanGenerator.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
-              <caret line="12" column="30" selection-start-line="12" selection-start-column="30" selection-end-line="12" selection-end-column="30" />
+            <state relative-caret-position="254">
+              <caret line="98" selection-start-line="98" selection-end-line="98" />
               <folding>
                 <element signature="e#0#52#0" expanded="true" />
               </folding>
@@ -60,8 +60,8 @@
       <file leaf-file-name="RoomNode.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/FloorPlan/RoomNode.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="578">
-              <caret line="34" lean-forward="true" selection-start-line="34" selection-end-line="34" />
+            <state relative-caret-position="119">
+              <caret line="31" column="51" lean-forward="true" selection-start-line="31" selection-start-column="51" selection-end-line="31" selection-end-column="51" />
               <folding>
                 <element signature="e#0#35#0" expanded="true" />
               </folding>
@@ -72,8 +72,8 @@
       <file leaf-file-name="SquarifiedTeeMap.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/DataStructures/SquarifiedTeeMap.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="782">
-              <caret line="70" column="8" selection-start-line="70" selection-start-column="8" selection-end-line="70" selection-end-column="8" />
+            <state relative-caret-position="101">
+              <caret line="35" column="8" selection-start-line="35" selection-start-column="8" selection-end-line="35" selection-end-column="8" />
             </state>
           </provider>
         </entry>
@@ -143,9 +143,9 @@
         <option value="$PROJECT_DIR$/Constraints/Constraint.py" />
         <option value="$PROJECT_DIR$/DataStructures/SquarifiedTeeMap.py" />
         <option value="$PROJECT_DIR$/FloorPlan/FloorPlan.py" />
-        <option value="$PROJECT_DIR$/FloorPlan/RoomNode.py" />
         <option value="$PROJECT_DIR$/FloorPlan/SuburbanGenerator.py" />
         <option value="$PROJECT_DIR$/Constraints/ConstraintSet2.py" />
+        <option value="$PROJECT_DIR$/FloorPlan/RoomNode.py" />
         <option value="$PROJECT_DIR$/main.py" />
       </list>
     </option>
@@ -296,7 +296,7 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="36" />
+      <option name="time" value="37" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
@@ -646,13 +646,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/DataStructures/SquarifiedTeeMap.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="782">
-          <caret line="70" column="8" selection-start-line="70" selection-start-column="8" selection-end-line="70" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/FloorPlan/FloorPlan.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
@@ -664,16 +657,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="116">
           <caret line="14" column="18" lean-forward="true" selection-start-line="14" selection-start-column="18" selection-end-line="14" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/FloorPlan/RoomNode.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="578">
-          <caret line="34" lean-forward="true" selection-start-line="34" selection-end-line="34" />
-          <folding>
-            <element signature="e#0#35#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -696,18 +679,35 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/FloorPlan/SuburbanGenerator.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="12" column="30" selection-start-line="12" selection-start-column="30" selection-end-line="12" selection-end-column="30" />
+        <state relative-caret-position="254">
+          <caret line="98" selection-start-line="98" selection-end-line="98" />
           <folding>
             <element signature="e#0#52#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main.py">
+    <entry file="file://$PROJECT_DIR$/DataStructures/SquarifiedTeeMap.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="101">
+          <caret line="35" column="8" selection-start-line="35" selection-start-column="8" selection-end-line="35" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/FloorPlan/RoomNode.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
-          <caret line="19" column="39" lean-forward="true" selection-start-line="19" selection-start-column="39" selection-end-line="19" selection-end-column="39" />
+          <caret line="31" column="51" lean-forward="true" selection-start-line="31" selection-start-column="51" selection-end-line="31" selection-end-column="51" />
+          <folding>
+            <element signature="e#0#35#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="24" column="62" selection-start-line="24" selection-start-column="62" selection-end-line="24" selection-end-column="62" />
           <folding>
             <element signature="e#0#57#0" expanded="true" />
           </folding>
