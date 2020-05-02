@@ -270,7 +270,8 @@ def generate_json_obj(fp_list: List[FloorPlan]):
 
 def check_window(room, json_wall_obj):
     if (json_wall_obj['type'] == 'external'
-            and room.room_type != RoomType.EXTRA_ROOM and room.room_type != RoomType.BATHROOM):
+            and room.room_type != RoomType.EXTRA_ROOM and room.room_type != RoomType.BATHROOM
+            and room.room_type != RoomType.STAIRCASE):
         json_wall_obj['window'] = True
     else:
         json_wall_obj['window'] = False
