@@ -36,7 +36,11 @@ def main():
     floor_generator_list.append(third_floor)
 
     fp_list = generate_house_plan(floor_generator_list)
-    generate_json_file(fp_list)
+    json_obj = generate_json_obj(fp_list)
+
+    with open('jsonHousePlan.json', 'w') as file:
+        file.write(json.dumps(json_obj, indent=True))
+
     show_house_plan(fp_list)
     print('Done!')
 
@@ -108,12 +112,12 @@ def show_house_plan(fp_list: List[FloorPlan]):
     cv2.destroyAllWindows()
 
 
-def generate_json_file(fp_list: List[FloorPlan]):
+def generate_json_obj(fp_list: List[FloorPlan]):
     print('Generating JSON File')
 
     json_obj = {
         'name': 'My House Plan',
-        'type': 'Flat',
+        'type': 'flat',
         'width': fp_list[0].width,
         'height': fp_list[0].height,
         'floors': []
@@ -130,38 +134,80 @@ def generate_json_file(fp_list: List[FloorPlan]):
         }
 
         for room_idx, room in enumerate(fp.rooms):
-            json_walls = [{
+            # Walls, windows and doors logic
+            # North obj
+            json_north = {
                 'direction': 'north',
                 'type': 'external' if room.y == 0 else 'internal',
                 'length': room.width,
-                'window': True if room.y == 0
-                          and room.room_type != RoomType.EXTRA_ROOM
-                          and room.room_type != RoomType.BATHROOM else False
-            },
-            {
+                'doors': []
+            }
+            check_window(room, json_north)
+            for room_adj in fp.rooms:
+                if room_adj == room:
+                    continue
+                if room.y == room_adj.y + room_adj.height:
+                    check_adjacency_x(room, room_adj, json_north)
+
+            # East obj
+            json_east = {
                 'direction': 'east',
                 'type': 'external' if room.x == 0 else 'internal',
                 'length': room.height,
-                'window': True if room.x == 0
-                          and room.room_type != RoomType.EXTRA_ROOM
-                          and room.room_type != RoomType.BATHROOM else False
-            },
-            {
+                'doors': []
+            }
+            check_window(room, json_east)
+            for room_adj in fp.rooms:
+                if room_adj == room:
+                    continue
+                if room.x == room_adj.x + room_adj.width:
+                    check_adjacency_y(room, room_adj, json_east)
+
+            # West obj
+            json_west = {
                 'direction': 'west',
                 'type': 'external' if room.x + room.width == fp.width else 'internal',
                 'length': room.height,
-                'window': True if room.x + room.width == fp.width
-                          and room.room_type != RoomType.EXTRA_ROOM
-                          and room.room_type != RoomType.BATHROOM else False
-            },
-            {
+                'doors': []
+            }
+            check_window(room, json_west)
+            for room_adj in fp.rooms:
+                if room_adj == room:
+                    continue
+                if room.x + room.width ==  room_adj.x:
+                    check_adjacency_y(room, room_adj, json_west)
+
+            # South obj
+            json_south = {
                 'direction': 'south',
                 'type': 'external' if room.y + room.height == fp.height else 'internal',
                 'length': room.width,
-                'window': True if room.y + room.height == fp.height
-                          and room.room_type != RoomType.EXTRA_ROOM
-                          and room.room_type != RoomType.BATHROOM else False
-            }]
+                'doors': []
+            }
+            check_window(room, json_south)
+            for room_adj in fp.rooms:
+                if room_adj == room:
+                    continue
+                if room.y + room.height == room_adj.y:
+                    check_adjacency_x(room, room_adj, json_south)
+
+            json_walls = [
+                json_north,
+                json_east,
+                json_west,
+                json_south
+            ]
+
+            # Put the external door in the living room
+            if room.room_type == RoomType.LIVING_ROOM:
+                for wall in json_walls:
+                    if wall['type'] == 'external':
+                        wall['doors'].append({
+                            'location': 0,
+                            'type': 'external',
+                            'to': 'STREET'
+                        })
+                        break
 
             json_room = {
                 'name': room.room_type.name,
@@ -175,7 +221,45 @@ def generate_json_file(fp_list: List[FloorPlan]):
         json_obj['floors'].append(json_floor)
 
     print('Done generating JSON')
-    print(json.dumps(json_obj, indent=True))
+    return json_obj
+
+
+def check_window(room, json_wall_obj):
+    if (json_wall_obj['type'] == 'external'
+            and room.room_type != RoomType.EXTRA_ROOM and room.room_type != RoomType.BATHROOM):
+        json_wall_obj['window'] = True
+    else:
+        json_wall_obj['window'] = False
+
+
+def check_adjacency_x(room, room_adj, json_wall_obj):
+    if room_adj.x <= room.x < room_adj.x + room_adj.width:
+        json_wall_obj['doors'].append({
+            'location': 0,
+            'type': 'internal',
+            'to': room_adj.room_type.name
+        })
+    elif room.x <= room_adj.x < room.x + room.width:
+        json_wall_obj['doors'].append({
+            'location': room_adj.x - room.x,
+            'type': 'internal',
+            'to': room_adj.room_type.name
+        })
+
+
+def check_adjacency_y(room, room_adj, json_wall_obj):
+    if room_adj.y <= room.y < room_adj.y + room_adj.height:
+        json_wall_obj['doors'].append({
+            'location': 0,
+            'type': 'internal',
+            'to': room_adj.room_type.name
+        })
+    elif room.y <= room_adj.y < room.y + room.height:
+        json_wall_obj['doors'].append({
+            'location': room_adj.y - room.y,
+            'type': 'internal',
+            'to': room_adj.room_type.name
+        })
 
 
 if __name__ == '__main__':
