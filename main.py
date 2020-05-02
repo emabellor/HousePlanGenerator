@@ -31,16 +31,16 @@ def main():
     second_floor.set_static_room_number(RoomType.BEDROOM, 2)
     second_floor.set_static_room_number(RoomType.BATHROOM, 1)
     second_floor.set_static_room_number(RoomType.EXTRA_ROOM, 1)
-    first_floor.set_static_room_number(RoomType.STAIRCASE, 0)
+    second_floor.set_static_room_number(RoomType.STAIRCASE, 0)
     floor_generator_list.append(second_floor)
 
-    third_floor = SuburbanGenerator(width=250, height=200, length=9, name='Third Floor')
+    third_floor = SuburbanGenerator(width=250, height=200, length=7, name='Third Floor')
     third_floor.set_static_room_number(RoomType.LIVING_ROOM, 0)
     third_floor.set_static_room_number(RoomType.KITCHEN, 0)
     third_floor.set_static_room_number(RoomType.BEDROOM, 1)
     third_floor.set_static_room_number(RoomType.BATHROOM, 1)
     third_floor.set_static_room_number(RoomType.EXTRA_ROOM, 0)
-    first_floor.set_static_room_number(RoomType.STAIRCASE, 0)
+    third_floor.set_static_room_number(RoomType.STAIRCASE, 0)
     floor_generator_list.append(third_floor)
 
     fp_list = generate_house_plan(floor_generator_list)
@@ -48,9 +48,11 @@ def main():
 
     directory = pathlib.Path(__file__).parent.absolute()
 
-    with open(os.path.join(directory, 'housePlan.json'), 'w') as file:
+    file_name = os.path.join(directory, 'housePlan.json')
+    with open(file_name, 'w') as file:
         file.write(json.dumps(json_obj, indent=True))
 
+    print('House plan generated in ' + file_name)
     show_house_plan(fp_list, json_obj)
     print('Done!')
 
@@ -166,6 +168,7 @@ def generate_json_obj(fp_list: List[FloorPlan]):
             'name': fp.name,
             'width': fp.width,
             'height': fp.height,
+            'length': fp.length,
             'noOfRooms': len(fp.rooms),
             'roof': 'roof' if floor_idx == len(fp_list) - 1 else 'ceiling',
             'rooms': []
@@ -177,7 +180,7 @@ def generate_json_obj(fp_list: List[FloorPlan]):
             json_north = {
                 'direction': 'north',
                 'type': 'external' if room.y == 0 else 'internal',
-                'length': room.width,
+                'width': room.width,
                 'doors': []
             }
             check_window(room, json_north)
@@ -191,7 +194,7 @@ def generate_json_obj(fp_list: List[FloorPlan]):
             json_east = {
                 'direction': 'east',
                 'type': 'external' if room.x == 0 else 'internal',
-                'length': room.height,
+                'width': room.height,
                 'doors': []
             }
             check_window(room, json_east)
@@ -205,7 +208,7 @@ def generate_json_obj(fp_list: List[FloorPlan]):
             json_west = {
                 'direction': 'west',
                 'type': 'external' if room.x + room.width == fp.width else 'internal',
-                'length': room.height,
+                'width': room.height,
                 'doors': []
             }
             check_window(room, json_west)
@@ -219,7 +222,7 @@ def generate_json_obj(fp_list: List[FloorPlan]):
             json_south = {
                 'direction': 'south',
                 'type': 'external' if room.y + room.height == fp.height else 'internal',
-                'length': room.width,
+                'width': room.width,
                 'doors': []
             }
             check_window(room, json_south)
