@@ -29,7 +29,7 @@ class SuburbanGenerator:
         self.constraints.add_or_update('AreaCloset', MinMax(100, 100))
 
         self.constraints.add_or_update('Staircase', MinMax(0, 1))
-        self.constraints.add_or_update('AreaStaircase', MinMax(100, 100))
+        self.constraints.add_or_update('AreaStaircase', MinMax(50, 50))
 
     def set_static_room_number(self, room_type: RoomType, rooms: int):
         if rooms < 0:

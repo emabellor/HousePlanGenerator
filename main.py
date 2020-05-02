@@ -5,6 +5,12 @@ from typing import List
 import cv2
 import numpy as np
 import json
+import pathlib
+import os
+
+# Constants
+inner_door_width = 20
+outer_door_width = 30
 
 
 def main():
@@ -25,23 +31,27 @@ def main():
     second_floor.set_static_room_number(RoomType.BEDROOM, 2)
     second_floor.set_static_room_number(RoomType.BATHROOM, 1)
     second_floor.set_static_room_number(RoomType.EXTRA_ROOM, 1)
+    first_floor.set_static_room_number(RoomType.STAIRCASE, 0)
     floor_generator_list.append(second_floor)
 
     third_floor = SuburbanGenerator(width=250, height=200, length=9, name='Third Floor')
     third_floor.set_static_room_number(RoomType.LIVING_ROOM, 0)
     third_floor.set_static_room_number(RoomType.KITCHEN, 0)
     third_floor.set_static_room_number(RoomType.BEDROOM, 1)
-    third_floor.set_static_room_number(RoomType.BATHROOM, 0)
+    third_floor.set_static_room_number(RoomType.BATHROOM, 1)
     third_floor.set_static_room_number(RoomType.EXTRA_ROOM, 0)
+    first_floor.set_static_room_number(RoomType.STAIRCASE, 0)
     floor_generator_list.append(third_floor)
 
     fp_list = generate_house_plan(floor_generator_list)
     json_obj = generate_json_obj(fp_list)
 
-    with open('jsonHousePlan.json', 'w') as file:
+    directory = pathlib.Path(__file__).parent.absolute()
+
+    with open(os.path.join(directory, 'housePlan.json'), 'w') as file:
         file.write(json.dumps(json_obj, indent=True))
 
-    show_house_plan(fp_list)
+    show_house_plan(fp_list, json_obj)
     print('Done!')
 
 
@@ -70,8 +80,8 @@ def generate_house_plan(floor_generator_list: List[SuburbanGenerator]):
     return fp_list
 
 
-def show_house_plan(fp_list: List[FloorPlan]):
-    for fp in fp_list:
+def show_house_plan(fp_list: List[FloorPlan], json_plan_obj):
+    for fp_index, fp in enumerate(fp_list):
         width = fp.width + 1
         height = fp.height + 1
 
@@ -102,6 +112,34 @@ def show_house_plan(fp_list: List[FloorPlan]):
             text_width, text_height = cv2.getTextSize(text_to_put, cv2.FONT_HERSHEY_SIMPLEX, font_scale, thickness)[0]
             cv2.putText(image, text_to_put, (r.x + 5, r.y + text_height + 5),
                         cv2.FONT_HERSHEY_SIMPLEX, font_scale, (0, 0, 0), thickness)
+
+        # Draw doors based on the json_object plan
+        json_floor = json_plan_obj['floors'][fp_index]
+        for json_room in json_floor['rooms']:
+            x = json_room['x']
+            y = json_room['y']
+            width = json_room['width']
+            height = json_room['height']
+            for json_wall in json_room['walls']:
+                for json_door in json_wall['doors']:
+                    location = json_door['location']
+                    door_w = json_door['width']
+
+                    if json_door['type'] == 'internal':
+                        color = (255, 0, 0)
+                    else:
+                        color = (0, 0, 255)
+
+                    if json_wall['direction'] == 'north':
+                        cv2.line(image, (x + location, y), (x + location + door_w, y), color, 2)
+                    elif json_wall['direction'] == 'east':
+                        cv2.line(image, (x, y + location), (x, y + location + door_w), color, 2)
+                    elif json_wall['direction'] == 'west':
+                        cv2.line(image, (x + width, y + location), (x + width, y + location + door_w), color, 2)
+                    elif json_wall['direction'] == 'south':
+                        cv2.line(image, (x + location + door_w, y + height), (x + location, y + height), color, 2)
+                    else:
+                        raise Exception('Not recognized: ' + str(json_wall['direction']))
 
         name_window = fp.name
         cv2.namedWindow(name_window, cv2.WINDOW_AUTOSIZE)
@@ -147,7 +185,7 @@ def generate_json_obj(fp_list: List[FloorPlan]):
                 if room_adj == room:
                     continue
                 if room.y == room_adj.y + room_adj.height:
-                    check_adjacency_x(room, room_adj, json_north)
+                    check_adjacency(room, room_adj, json_north, is_horizontal=True)
 
             # East obj
             json_east = {
@@ -161,7 +199,7 @@ def generate_json_obj(fp_list: List[FloorPlan]):
                 if room_adj == room:
                     continue
                 if room.x == room_adj.x + room_adj.width:
-                    check_adjacency_y(room, room_adj, json_east)
+                    check_adjacency(room, room_adj, json_east, is_horizontal=False)
 
             # West obj
             json_west = {
@@ -174,8 +212,8 @@ def generate_json_obj(fp_list: List[FloorPlan]):
             for room_adj in fp.rooms:
                 if room_adj == room:
                     continue
-                if room.x + room.width ==  room_adj.x:
-                    check_adjacency_y(room, room_adj, json_west)
+                if room.x + room.width == room_adj.x:
+                    check_adjacency(room, room_adj, json_west, is_horizontal=False)
 
             # South obj
             json_south = {
@@ -189,7 +227,7 @@ def generate_json_obj(fp_list: List[FloorPlan]):
                 if room_adj == room:
                     continue
                 if room.y + room.height == room_adj.y:
-                    check_adjacency_x(room, room_adj, json_south)
+                    check_adjacency(room, room_adj, json_south, is_horizontal=True)
 
             json_walls = [
                 json_north,
@@ -205,7 +243,8 @@ def generate_json_obj(fp_list: List[FloorPlan]):
                         wall['doors'].append({
                             'location': 0,
                             'type': 'external',
-                            'to': 'STREET'
+                            'to': 'STREET',
+                            'width': outer_door_width
                         })
                         break
 
@@ -213,6 +252,8 @@ def generate_json_obj(fp_list: List[FloorPlan]):
                 'name': room.room_type.name,
                 'x': room.x,
                 'y': room.y,
+                'width': room.width,
+                'height': room.height,
                 'walls': json_walls,
             }
 
@@ -232,18 +273,47 @@ def check_window(room, json_wall_obj):
         json_wall_obj['window'] = False
 
 
+def check_adjacency(room, room_adj, json_wall_obj, is_horizontal):
+    is_adj = True
+
+    if room.room_type == RoomType.STAIRCASE and room_adj.room_type != RoomType.LIVING_ROOM:
+        is_adj = False
+    if room.room_type != RoomType.LIVING_ROOM and room_adj.room_type == RoomType.STAIRCASE:
+        is_adj = False
+
+    if room.room_type == RoomType.EXTRA_ROOM and room_adj.room_type != RoomType.BEDROOM:
+        is_adj = False
+    if room.room_type != RoomType.BEDROOM and room_adj.room_type == RoomType.EXTRA_ROOM:
+        is_adj = False
+
+    if room.room_type == RoomType.EXTRA_ROOM and room_adj.room_type == RoomType.BEDROOM \
+            and room.x != room_adj.x and room.y != room_adj.y:
+        is_adj = False
+    if room.room_type == RoomType.BEDROOM and room_adj.room_type == RoomType.EXTRA_ROOM \
+            and room.x != room_adj.x and room.y != room_adj.y:
+        is_adj = False
+
+    if is_adj:
+        if is_horizontal:
+            check_adjacency_x(room, room_adj, json_wall_obj)
+        else:
+            check_adjacency_y(room, room_adj, json_wall_obj)
+
+
 def check_adjacency_x(room, room_adj, json_wall_obj):
     if room_adj.x <= room.x < room_adj.x + room_adj.width:
         json_wall_obj['doors'].append({
             'location': 0,
             'type': 'internal',
-            'to': room_adj.room_type.name
+            'to': room_adj.room_type.name,
+            'width': inner_door_width
         })
     elif room.x <= room_adj.x < room.x + room.width:
         json_wall_obj['doors'].append({
             'location': room_adj.x - room.x,
             'type': 'internal',
-            'to': room_adj.room_type.name
+            'to': room_adj.room_type.name,
+            'width': inner_door_width
         })
 
 
@@ -252,13 +322,15 @@ def check_adjacency_y(room, room_adj, json_wall_obj):
         json_wall_obj['doors'].append({
             'location': 0,
             'type': 'internal',
-            'to': room_adj.room_type.name
+            'to': room_adj.room_type.name,
+            'width': inner_door_width
         })
     elif room.y <= room_adj.y < room.y + room.height:
         json_wall_obj['doors'].append({
             'location': room_adj.y - room.y,
             'type': 'internal',
-            'to': room_adj.room_type.name
+            'to': room_adj.room_type.name,
+            'width': inner_door_width
         })
 
 
