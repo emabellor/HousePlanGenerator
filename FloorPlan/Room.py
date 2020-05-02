@@ -6,7 +6,8 @@ class RoomType(Enum):
     BEDROOM = 2,
     KITCHEN = 3,
     BATHROOM = 4,
-    EXTRA_ROOM = 5
+    EXTRA_ROOM = 5,
+    STAIRCASE = 6
 
 
 class Room:

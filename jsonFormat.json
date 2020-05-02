@@ -1,0 +1,139 @@
+{
+    "name": "My House Plan",
+    "type": "flat",
+    "length": 9,
+    "width": 6.5,
+    "height": 2.5,
+    "floors" : [
+    {
+        "name": "First Floor",
+        "width": 6.5,
+        "height": 2.5,
+        "noOfRooms": 2,
+        "rooms": [
+        {
+            "name": "BedRoom",
+            "x": 0,
+            "y": 0,
+            "walls": [
+            {
+                "direction": "North",
+                "type": "external",
+                "length": 3,
+                "window": true
+            },
+            {
+                "direction": "East",
+                "type": "external",
+                "length": 4.5
+            },
+            {
+                "direction": "South",
+                "type": "internal",
+                "length": 3
+            },
+                {
+                "direction": "West",
+                "type": "internal",
+                "length": 4.5,
+                "door": [{"type": "internal"}]
+            }],
+            "roof": "ceiling"
+        },
+        {
+            "name": "BathRoom",
+            "x": 1,
+            "y": 1,
+            "walls": [
+            {
+                "direction": "North",
+                "type": "internal",
+                "length": 3
+            },
+            {
+                "direction": "East",
+                "type": "external",
+                "length": 2
+            },
+            {
+                "direction": "South",
+                "type": "external",
+                "length": 3,
+                "window": true
+            },
+            {
+                "direction": "West",
+                "type": "internal",
+                "length": 2,
+                "door": {"type": "internal"}
+            }],
+            "roof": "ceiling"
+        }]
+    },
+    {
+        "name": "Second Floor",
+        "width": 6.5,
+        "height": 1.5,
+        "noOfRooms": 2,
+        "rooms": [
+        {
+            "name": "Bedroom",
+            "x": 0,
+            "y": 0,
+            "walls": [
+            {
+                "direction": "North",
+                "type": "external",
+                "length": 3,
+                "window": true
+            },
+            {
+                "direction": "East",
+                "type": "external",
+                "length": 4.5
+            },
+            {
+                "direction": "South",
+                "type": "internal",
+                "length": 3
+            },
+                {
+                "direction": "West",
+                "type": "internal",
+                "length": 4.5,
+                "door": [{"type": "internal"}]
+            }],
+            "roof": "ceiling"
+        },
+        {
+            "name": "Bedroom",
+            "x": 1,
+            "y": 1,
+            "walls": [
+            {
+                "direction": "North",
+                "type": "internal",
+                "length": 3
+            },
+            {
+                "direction": "East",
+                "type": "external",
+                "length": 2
+            },
+            {
+                "direction": "South",
+                "type": "external",
+                "length": 3,
+                "window": true
+            },
+            {
+                "direction": "West",
+                "type": "internal",
+                "length": 2,
+                "door": {"type": "internal"}
+            }],
+            "roof": "ceiling"
+        }]
+    }]
+}
+

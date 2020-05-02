@@ -13,10 +13,6 @@ class RoomNode:
         self.children: List['RoomNode'] = []
         self.area = 0
 
-    def to_floor_plan(self):
-        # Default home size is 250 x 250
-        return self.to_floor_plan_width_height(250, 250)
-
     def to_floor_plan_width_height(self, width, height):
         # min_slice_ratio = Constraint.get_random_number(25, 45) / 100
         # line to avoid stack overflow exception. Set based on the c# code
@@ -41,11 +37,7 @@ class RoomNode:
 
         # Build our floor plan off our our tree map
         for r in rectangles:
-            fp.add_room(r.x, r.y, r.width, r.height, r.slice_item.elements[0].obj.room_type)
-
-            # Build our rooms internal tree map
             for child in r.slice_item.elements:
-                # We ignore nodes without extra_rooms
                 if len(child.obj.extra_rooms) > 0:
                     # Set children and blank the extra_rooms variable
                     child.obj.children = child.obj.extra_rooms
@@ -54,6 +46,9 @@ class RoomNode:
                     # We must offset these and then merge our floorplans
                     internal_fp = child.obj.to_floor_plan_width_height(r.width, r.height)
                     fp.merge_floor_plan_offset(internal_fp, r.x, r.y)
+                else:
+                    # Room without extra rooms - Add it
+                    fp.add_room(r.x, r.y, r.width, r.height, r.slice_item.elements[0].obj.room_type)
 
         # return our produced floor plan
         return fp

@@ -6,9 +6,11 @@ from FloorPlan.RoomNode import RoomNode
 
 class SuburbanGenerator:
 
-    def __init__(self, width, height):
+    def __init__(self, name, width, height, length):
         self.width = width
         self.height = height
+        self.name = name
+        self.length = length
 
         self.constraints = ConstraintSet()
         self.constraints.add_or_update('LivingRooms', MinMax(1, 1))
@@ -25,6 +27,9 @@ class SuburbanGenerator:
 
         self.constraints.add_or_update('ExtraRoom', MinMax(0, 1))
         self.constraints.add_or_update('AreaCloset', MinMax(100, 100))
+
+        self.constraints.add_or_update('Staircase', MinMax(0, 1))
+        self.constraints.add_or_update('AreaStaircase', MinMax(100, 100))
 
     def set_static_room_number(self, room_type: RoomType, rooms: int):
         if rooms < 0:
@@ -49,6 +54,8 @@ class SuburbanGenerator:
             return 'LivingRooms'
         elif room_type == RoomType.EXTRA_ROOM:
             return 'ExtraRoom'
+        elif room_type == RoomType.STAIRCASE:
+            return 'Staircase'
         else:
             raise Exception('Type not recognized: ' + room_type.name)
 
@@ -96,13 +103,21 @@ class SuburbanGenerator:
         if main is None:
             raise Exception('There is not rooms to draw in the floor plan')
         else:
-            return main.to_floor_plan_width_height(self.width, self.height)
+            fp = main.to_floor_plan_width_height(self.width, self.height)
+            fp.name = self.name
+            fp.length = self.length
+            return fp
 
     def generate_valid_room(self, room_type:RoomType):
         room = RoomNode(room_type)
 
         if room_type == RoomType.LIVING_ROOM:
             room.area = self.constraints.generate_value('AreaLivingRooms')
+
+            if self.constraints.generate_value('Staircase') > 0:
+                print('An Staircase was generated in a living room')
+                room.extra_rooms.insert(0, self.generate_valid_room(RoomType.STAIRCASE))
+
         elif room_type == RoomType.BEDROOM:
             room.area = self.constraints.generate_value('AreaBedRooms')
 
@@ -117,6 +132,8 @@ class SuburbanGenerator:
             room.area = self.constraints.generate_value('AreaBathrooms')
         elif room_type == room_type.EXTRA_ROOM:
             room.area = self.constraints.generate_value('AreaCloset')
+        elif room_type == RoomType.STAIRCASE:
+            room.area = self.constraints.generate_value('AreaStaircase')
 
         return room
 

@@ -1,11 +1,14 @@
 from FloorPlan.Room import RoomType, Room
+from typing import List
 
 
 class FloorPlan:
     def __init__(self, width, height):
-        self.rooms = []
+        self.rooms:List[Room] = []
         self.width = width
         self.height = height
+        self.name = ''
+        self.length = 9
 
     def add_room(self, x, y, width, height, room_type: RoomType):
         self.rooms.append(Room(x, y, width, height, room_type))
