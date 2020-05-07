@@ -1,0 +1,7 @@
+ChangeControl
+HousePlanGenerator
+
+1.0.0: Initial commit
+1.0.1: Addition of multifloor logic for house plan generation
+1.0.2: Addition of doors in the house plan generation
+1.0.3: The doors now are wall centered. The door location is replaced with an image
