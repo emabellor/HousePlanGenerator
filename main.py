@@ -12,11 +12,16 @@ import os
 inner_door_width = 30
 outer_door_width = 60
 
+# Constant that modifies how the rooms are assigned
+# Must be between zero and one
+min_slice_ratio = 0
+
 
 def main():
     floor_generator_list: List[SuburbanGenerator] = []
 
-    first_floor = SuburbanGenerator(width=300, height=300, length=9, name='First Floor')
+    first_floor = SuburbanGenerator(width=300, height=300, length=9, name='First Floor',
+                                    min_slice_ratio=min_slice_ratio)
     first_floor.set_static_room_number(RoomType.LIVING_ROOM, 1)
     first_floor.set_static_room_number(RoomType.KITCHEN, 1)
     first_floor.set_static_room_number(RoomType.BEDROOM, 1)
@@ -25,7 +30,8 @@ def main():
     first_floor.set_static_room_number(RoomType.STAIRCASE, 1)
     floor_generator_list.append(first_floor)
 
-    second_floor = SuburbanGenerator(width=250, height=250, length=9, name='Second Floor')
+    second_floor = SuburbanGenerator(width=250, height=250, length=9, name='Second Floor',
+                                     min_slice_ratio=min_slice_ratio)
     second_floor.set_static_room_number(RoomType.LIVING_ROOM, 0)
     second_floor.set_static_room_number(RoomType.KITCHEN, 0)
     second_floor.set_static_room_number(RoomType.BEDROOM, 2)
@@ -34,7 +40,8 @@ def main():
     second_floor.set_static_room_number(RoomType.STAIRCASE, 0)
     floor_generator_list.append(second_floor)
 
-    third_floor = SuburbanGenerator(width=250, height=200, length=7, name='Third Floor')
+    third_floor = SuburbanGenerator(width=250, height=200, length=7, name='Third Floor',
+                                    min_slice_ratio=min_slice_ratio)
     third_floor.set_static_room_number(RoomType.LIVING_ROOM, 0)
     third_floor.set_static_room_number(RoomType.KITCHEN, 0)
     third_floor.set_static_room_number(RoomType.BEDROOM, 1)

@@ -6,7 +6,7 @@ from FloorPlan.RoomNode import RoomNode
 
 class SuburbanGenerator:
 
-    def __init__(self, name, width, height, length):
+    def __init__(self, name, width, height, length, min_slice_ratio=0):
         self.width = width
         self.height = height
         self.name = name
@@ -30,6 +30,17 @@ class SuburbanGenerator:
 
         self.constraints.add_or_update('Staircase', MinMax(0, 1))
         self.constraints.add_or_update('AreaStaircase', MinMax(50, 50))
+
+        self.min_slice_ratio = 0
+        self.set_min_slice_ratio(min_slice_ratio)
+
+    def set_min_slice_ratio(self, min_slice_ratio):
+        if min_slice_ratio < 0:
+            raise Exception("Min slice ratio can't be lower than zero")
+        elif min_slice_ratio > 1:
+            raise Exception("Min slice ratio can't be greater than one")
+        else:
+            self.min_slice_ratio = min_slice_ratio
 
     def set_static_room_number(self, room_type: RoomType, rooms: int):
         if rooms < 0:
@@ -103,7 +114,7 @@ class SuburbanGenerator:
         if main is None:
             raise Exception('There is not rooms to draw in the floor plan')
         else:
-            fp = main.to_floor_plan_width_height(self.width, self.height)
+            fp = main.to_floor_plan_width_height(self.width, self.height, self.min_slice_ratio)
             fp.name = self.name
             fp.length = self.length
             return fp

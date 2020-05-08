@@ -13,11 +13,7 @@ class RoomNode:
         self.children: List['RoomNode'] = []
         self.area = 0
 
-    def to_floor_plan_width_height(self, width, height):
-        # min_slice_ratio = Constraint.get_random_number(25, 45) / 100
-        # line to avoid stack overflow exception. Set based on the c# code
-        min_slice_ratio = 0
-
+    def to_floor_plan_width_height(self, width, height, min_slice_ratio):
         # Generate our squarified tree map
         nodes = self.select_nodes()
 
@@ -34,6 +30,7 @@ class RoomNode:
         rectangles = SquarifiedTreeMap.get_rectangles_slice_item(slice_item, width, height)
 
         fp = FloorPlan(width, height)
+        print('Drawing floor plan')
 
         # Build our floor plan off our our tree map
         for r in rectangles:
@@ -44,7 +41,7 @@ class RoomNode:
                     child.obj.extra_rooms = []
                     # Child tree ma uses local coordinates of parent room
                     # We must offset these and then merge our floorplans
-                    internal_fp = child.obj.to_floor_plan_width_height(r.width, r.height)
+                    internal_fp = child.obj.to_floor_plan_width_height(r.width, r.height, min_slice_ratio)
                     fp.merge_floor_plan_offset(internal_fp, r.x, r.y)
                 else:
                     # Room without extra rooms - Add it

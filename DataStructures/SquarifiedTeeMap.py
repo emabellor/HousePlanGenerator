@@ -58,8 +58,11 @@ class SquarifiedTreeMap:
         for element in elements:
             total += element.value
 
-        for element in elements:
+        for index, element in enumerate(elements):
             if current > slice_width:
+                remaining_elements.append(element)
+            # Avoid stack overflow if the algorithm can't slice items
+            elif len(remaining_elements) == 0 and index == len(elements) - 1:
                 remaining_elements.append(element)
             else:
                 elements_in_slice.append(element)
